@@ -1,3 +1,5 @@
 /.cache/
 /.direnv/
 /graphics
+/.clangd/
+/sim-window

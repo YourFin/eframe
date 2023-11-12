@@ -4,24 +4,30 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils/main";
   };
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, stable, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = nixpkgs.legacyPackages.${system};
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+        stablePkgs = stable.legacyPackages.${system};
       in rec {
         packages = flake-utils.lib.flattenTree {
           gitAndTools = pkgs.gitAndTools;
-          stdenv = pkgs.clangStdenv;
           cairo = pkgs.cairo.dev;
         };
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
             (enableDebugging cairo)
-            llvmPackages_9.clangUseLLVM
-            clangStdenv
+            gcc13
+            imgui
             gnumake
             bear
             pkg-config
+            pkgs.SDL2
           ];
+          shellHook = ''
+            export IMGUI_NIX="${pkgs.imgui.out}"
+            export SDL2_NIX="${pkgs.SDL2.out}"
+          '';
         };
       });
 }
