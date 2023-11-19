@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "crow-git": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1661330829,
+        "narHash": "sha256-rxA4HgdyY+Pi0M5cGtci6DRR9F947GPD25ut4gvSIP0=",
+        "owner": "CrowCpp",
+        "repo": "Crow",
+        "rev": "edf12f699ec3bf6f751cf73cb97f32919e48ca6e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "CrowCpp",
+        "ref": "edf12f6",
+        "repo": "Crow",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
@@ -37,6 +54,7 @@
     },
     "root": {
       "inputs": {
+        "crow-git": "crow-git",
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
         "stable": "stable"

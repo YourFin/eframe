@@ -9,3 +9,7 @@ https://clangd.llvm.org/installation
 https://github.com/rizsotto/Bear
 https://thingpulse.com/embed-binary-data-on-esp32/
 https://www.cairographics.org/
+
+## US gov't apis:
+https://geocoding.geo.census.gov/geocoder/Geocoding_Services_API.html
+https://weather-gov.github.io/api/general-faqs

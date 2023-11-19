@@ -1,70 +1,63 @@
 #include "simulator.h"
 
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_error.h"
-#include "SDL_pixels.h"
-#include "SDL_surface.h"
-#include "SDL_video.h"
 #include "cairo.h"
-#include "imgui/imgui.h"
+#include "crow.h"
+#include "crow/app.h"
+#include "gtkmm/application.h"
+#include "gtkmm/box.h"
+#include "gtkmm/button.h"
+#include "gtkmm/enums.h"
+#include "gtkmm/object.h"
+#include <chrono>
 #include <cstddef>
 #include <cstdio>
-#include <iostream>
+#include <gtkmm.h>
 #include <new>
 #include <optional>
 
-extern "C" {
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_error.h"
-}
-
-namespace sdl {
+namespace simwin {
 enum error { INIT_ISSUE };
 
-std::optional<error> init() {
-  printf("Yo");
+namespace window::dfault {
+const int width = 600;
+const int height = 700;
+} // namespace window::dfault
 
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    printf("Couldn't init SDL: %s\n", SDL_GetError());
-    return INIT_ISSUE;
-  }
+class SimWindow : public Gtk::Window {
+public:
+  SimWindow();
 
-  SDL_Window *window =
-      SDL_CreateWindow("SDL Test", SDL_WINDOWPOS_UNDEFINED,
-                       SDL_WINDOWPOS_UNDEFINED, 500, 500, SDL_WINDOW_SHOWN);
-  if (window == std::nullptr_t()) {
-    printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-    return INIT_ISSUE;
-  }
+private:
+  // Member widgets
+};
+// TODO: https://docs.gtk.org/gtk4/class.DrawingArea.html
 
-  SDL_Surface *screenSurface = SDL_GetWindowSurface(window);
+SimWindow::SimWindow() {
+  set_title("Eink simulator");
+  set_default_size(window::dfault::width, window::dfault::height);
 
-  SDL_FillRect(screenSurface, std::nullptr_t(),
-               SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+  auto button = Gtk::make_managed<Gtk::Button>("Hello, world!");
+  button->signal_clicked().connect([]() { printf("Hello, world!\n"); });
+  auto label = Gtk::make_managed<Gtk::Label>("Click me!");
 
-  SDL_UpdateWindowSurface(window);
+  // auto hbox = Gtk::manage(Gtk::Box(Gtk::Orientation::VERTICAL, 10));
+  auto hbox = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::VERTICAL, 10);
+  hbox->append(*button);
+  hbox->append(*label);
+  hbox->set_margin(10);
 
-  // Hack to get window to stay up
-  SDL_Event e;
-  bool quit = false;
-  while (quit == false) {
-    while (SDL_PollEvent(&e)) {
-      if (e.type == SDL_QUIT) {
-        printf("Recieved quit event...");
-        quit = true;
-      }
-    }
-  }
-  SDL_DestroyWindow(window);
-  SDL_Quit();
-
-  return std::nullopt;
+  set_child(*hbox);
 }
-} // namespace sdl
+} // namespace simwin
 
-int main() {
-  if (sdl::init().has_value()) {
-    return 1;
-  }
-  return 0;
+int main(int argc, char** argv) {
+  crow::SimpleApp webapp;
+  CROW_ROUTE(webapp, "/")([]() { return "Hello, world"; });
+  auto gtkApp = Gtk::Application::create("yf.eframe.simulator");
+  auto webappFuture = webapp.port(8080).run_async();
+
+  int exitCode = gtkApp->make_window_and_run<simwin::SimWindow>(argc, argv);
+  webapp.stop();
+  webappFuture.wait_for(std::chrono::milliseconds(500));
+  return exitCode;
 }
