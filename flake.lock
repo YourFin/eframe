@@ -36,6 +36,24 @@
         "type": "github"
       }
     },
+    "ion-c-git": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1698433097,
+        "narHash": "sha256-7pACASsC9gaXtIwLHXvbdaEIvG7fT8sty2HUVTamk8Q=",
+        "ref": "refs/heads/master",
+        "rev": "6d4de4150fe162dde3fad55cefee8d3ec64fb974",
+        "revCount": 224,
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/amazon-ion/ion-c?ref=v1.1.2"
+      },
+      "original": {
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/amazon-ion/ion-c?ref=v1.1.2"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1699094435,
@@ -56,6 +74,7 @@
       "inputs": {
         "crow-git": "crow-git",
         "flake-utils": "flake-utils",
+        "ion-c-git": "ion-c-git",
         "nixpkgs": "nixpkgs",
         "stable": "stable"
       }
