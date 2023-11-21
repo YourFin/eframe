@@ -4,7 +4,18 @@
 # @file
 # @version 0.1
 simulator: simulator.cc
-	 NIX_LDFLAGS="$$(pkg-config --libs gtkmm-4.0) $$NIX_LDFLAGS" $(CXX) simulator.cc $$(pkg-config --cflags cairo gtkmm-4.0 curlpp asio libzmq) -isystem $$ZMQPP_NIX/include -isystem $$CROW_NIX/include $$NIX_CFLAGS_COMPILE -std=c++23 -Wall -o sim-window
+	 NIX_LDFLAGS="$$(pkg-config --libs gtkmm-4.0) $$NIX_LDFLAGS" \
+		$(CXX) simulator.cc \
+		$$(pkg-config --cflags \
+			cairo \
+			gtkmm-4.0 \
+			curlpp \
+			asio \
+			libzmq) \
+		-isystem $$CROW_NIX/include \
+		$$NIX_CFLAGS_COMPILE \
+		-std=c++23 -Wall \
+		-o sim-window
 
 sim: simulator
 	./sim-window
