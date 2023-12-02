@@ -35,6 +35,7 @@
                 executable = true;
                 destination = "/bin/git";
                 text = ''
+                  #!/bin/sh
                   # see: https://github.com/amazon-ion/ion-c/blob/master/cmake/VersionHeader.cmake#L15
                   echo 'v1.1.2-0-gece2e8c23e9d017852dff67646652689ff9e8d2b'
                 '';
